@@ -1,6 +1,17 @@
 = ma-zmq
 
-Description goes here.
+MaZMQ is an extension from EMZeroMQ. Its purpose is to have a RoundRobin handler to work with ZMQ sockets.
+Its functionality by this moment is very restricted, and harcoded too. As a piece of another project, it will be updated in the following.
+
+= Using MaZMQ
+
+EM.run do
+  context = EM::ZeroMQ::Context.new(1)
+  round_robin = MaZMQ::RoundRobin.new(context, [3200, 3201])
+  EM::add_periodic_timer(0.2) do
+    round_robin.send_with('ping')
+  end
+end
 
 == Contributing to ma-zmq
  
