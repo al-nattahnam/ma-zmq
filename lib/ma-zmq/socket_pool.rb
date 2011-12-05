@@ -1,5 +1,3 @@
-require 'channel'
-
 module MaZMQ
   class SocketPool
     def initialize(context, ports)

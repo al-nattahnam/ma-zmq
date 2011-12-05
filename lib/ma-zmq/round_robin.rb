@@ -1,5 +1,3 @@
-require 'socket_pool'
-
 module MaZMQ
   class RoundRobin
     include EM::Deferrable

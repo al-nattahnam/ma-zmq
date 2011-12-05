@@ -3,6 +3,8 @@ require 'em-zeromq'
 require 'rzmq_mod'
 
 require 'ma-zmq/round_robin'
+require 'ma-zmq/socket_pool'
+require 'ma-zmq/channel'
 
 module MaZMQ
   class Server
