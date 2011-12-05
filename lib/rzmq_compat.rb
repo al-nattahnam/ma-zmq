@@ -2,14 +2,14 @@ module RZMQCompat
   class ZMQError < RuntimeError; end
   class ZMQOperationFailed < ZMQError; end
 
-  def self.included(klass)
-    klass.instance_eval do
-      %w(getsockopt recv).each do |m|
-        alias_method :"#{m}_without_raise", m.to_sym
-        alias_method m.to_sym, :"#{m}_with_raise"
-      end
-    end
-  end
+  #def self.included(klass)
+  #  klass.instance_eval do
+  #    %w(getsockopt recv).each do |m|
+  #      alias_method :"#{m}_without_raise", m.to_sym
+  #      alias_method m.to_sym, :"#{m}_with_raise"
+  #    end
+  #  end
+  #end
 
   def getsockopt_with_raise(opt, *args)
     arity = method(:getsockopt_without_raise).arity
