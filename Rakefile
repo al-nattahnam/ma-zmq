@@ -17,8 +17,8 @@ Jeweler::Tasks.new do |gem|
   gem.name = "ma-zmq"
   gem.homepage = "http://github.com/krakatoa/ma-zmq"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
+  gem.summary = %Q{RoundRobin handler for the EmZeroMQ}
+  gem.description = %Q{RoundRobin handler for the EmZeroMQ}
   gem.email = "krakatoa1987@gmail.com"
   gem.authors = ["Fernando Alonso"]
   # dependencies defined in Gemfile
