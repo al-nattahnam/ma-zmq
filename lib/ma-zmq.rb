@@ -1,6 +1,6 @@
 require 'eventmachine'
 require 'em-zeromq'
-require 'rzmq_mod'
+require 'rzmq_compat'
 
 require 'ma-zmq/round_robin'
 require 'ma-zmq/socket_pool'
