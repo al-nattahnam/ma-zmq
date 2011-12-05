@@ -1,4 +1,4 @@
-module RZMQMCompat
+module RZMQCompat
   class ZMQError < RuntimeError; end
   class ZMQOperationFailed < ZMQError; end
 
