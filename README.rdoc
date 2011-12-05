@@ -5,13 +5,13 @@ Its functionality by this moment is very restricted, and harcoded too. As a piec
 
 = Using MaZMQ
 
-EM.run do
-  context = EM::ZeroMQ::Context.new(1)
-  round_robin = MaZMQ::RoundRobin.new(context, [3200, 3201])
-  EM::add_periodic_timer(0.2) do
-    round_robin.send_with('ping')
+  EM.run do
+    context = EM::ZeroMQ::Context.new(1)
+    round_robin = MaZMQ::RoundRobin.new(context, [3200, 3201])
+    EM::add_periodic_timer(0.2) do
+      round_robin.send_with('ping')
+    end
   end
-end
 
 == Contributing to ma-zmq
  
