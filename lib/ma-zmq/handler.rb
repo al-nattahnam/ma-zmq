@@ -1,8 +1,8 @@
 module MaZMQ
   class Handler < EM::Connection
-    #def initialize(socket)
-    #  @socket = socket
-    #end
+    def initialize(socket)
+      @socket = socket
+    end
 
     def notify_readable
       msg = @socket.recv_string
