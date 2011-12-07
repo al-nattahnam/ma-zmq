@@ -8,7 +8,7 @@ module MaZMQ
     end
 
     def connect(protocol, address, port)
-      return false if not MaZMQ::Socket.valid_protocol?(protocol)
+      return false if not MaZMQ::SocketHandler.valid_protocol?(protocol)
 
       zmq_address = "#{protocol.to_s}://#{address}:#{port.to_s}"
       @socket.connect(zmq_address)
