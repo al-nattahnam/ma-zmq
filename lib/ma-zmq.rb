@@ -6,7 +6,8 @@ require 'ma-zmq/round_robin'
 require 'ma-zmq/socket_pool'
 require 'ma-zmq/channel'
 
-require 'ma-zmq/handler'
+require 'ma-zmq/connection_handler'
+require 'ma-zmq/socket_handler'
 require 'ma-zmq/socket'
 require 'ma-zmq/request'
 
