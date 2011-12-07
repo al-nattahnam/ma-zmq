@@ -1,7 +1,9 @@
 module MaZMQ
   class SocketHandler
-    def initialize(socket=nil)
-      @connection = build_connection(socket)
+    def initialize(socket)
+      @socket = socket
+
+      @connection = build_connection
       @connection.notify_readable = true
       @connection.notify_writable = true
     end
@@ -16,12 +18,16 @@ module MaZMQ
       @connection.on_write(block)
     end
 
+    def socket_type
+      @socket.socket_type
+    end
+
     private
-    def build_connection(socket)
+    def build_connection
       fd = []
-      socket.getsockopt(ZMQ::FD, fd)
+      @socket.getsockopt(ZMQ::FD, fd)
       return nil if not ZMQ::Util.resultcode_ok? fd[0]
-      EM.watch(fd[0], MaZMQ::ConnectionHandler, socket)
+      EM.watch(fd[0], MaZMQ::ConnectionHandler, @socket)
     end
   end
 end
