@@ -8,18 +8,7 @@ module MaZMQ
 
     def initialize()
       @socket = MaZMQ::context.socket(@@socket_type)
-
-      @connection = build_em_connection
-      @connection.notify_readable = true
-      @connection.notify_writable = true
-      #@em_handler = bla
-    end
-
-    def build_em_connection
-      fd = []
-      @socket.getsockopt(ZMQ::FD, fd)
-      return nil if not ZMQ::Util.resultcode_ok? fd[0]
-      EM.watch(fd[0], MaZMQ::Handler, self)
+      @socket_handler = MaZMQ::SocketHandler.new(@socket)
     end
 
     def connect(protocol, address, port)
@@ -43,12 +32,14 @@ module MaZMQ
       @@socket_type
     end
 
-    def on_read(&block)
-      #OwnHandler.pass(&block)
+    def on_read(block)
+      return false if block.arity != 1
+      @socket_handler.on_read(block)
     end
 
-    def on_write(&block)
-      #OwnHandler.pass(&block)
+    def on_write(block)
+      return false if block.arity != 1
+      @socket_handler.on_write(block)
     end
 
     protected
