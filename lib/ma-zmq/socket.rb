@@ -10,6 +10,7 @@ module MaZMQ
       @socket = MaZMQ::context.socket(@@socket_type)
 
       @connection = build_em_connection
+      @connection.register_readable
       #@em_handler = bla
     end
 
