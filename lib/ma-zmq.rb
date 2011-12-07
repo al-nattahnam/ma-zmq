@@ -8,7 +8,9 @@ require 'ma-zmq/channel'
 
 require 'ma-zmq/connection_handler'
 require 'ma-zmq/socket_handler'
+
 require 'ma-zmq/request'
+require 'ma-zmq/reply'
 
 module MaZMQ
   @@context = nil

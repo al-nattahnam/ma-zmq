@@ -8,10 +8,19 @@ module MaZMQ
     end
 
     def connect(protocol, address, port)
+      # check multiple connects for ZMQ::REQ should RoundRobin
       return false if not MaZMQ::SocketHandler.valid_protocol?(protocol)
 
       zmq_address = "#{protocol.to_s}://#{address}:#{port.to_s}"
       @socket.connect(zmq_address)
+    end
+
+    def bind(protocol, address, port)
+      # check once binded should not bind anymore
+      return false if not MaZMQ::SocketHandler.valid_protocol?(protocol)
+
+      zmq_address = "#{protocol.to_s}://#{address}:#{port.to_s}"
+      @socket.bind(zmq_address)
     end
 
     def send_string(msg)
