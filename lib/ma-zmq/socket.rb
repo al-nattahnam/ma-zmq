@@ -8,7 +8,16 @@ module MaZMQ
 
     def initialize()
       @socket = MaZMQ::context.socket(@@socket_type)
+
+      @connection = build_em_connection
       #@em_handler = bla
+    end
+
+    def build_em_connection
+      fd = []
+      @socket.getsockopt(ZMQ::FD, fd)
+      return nil if not ZMQ::Util.resultcode_ok? fd[0]
+      EM.watch(fd[0], MaZMQ::Handler)
     end
 
     def connect(protocol, address, port)
