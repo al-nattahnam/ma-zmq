@@ -3,7 +3,7 @@ module MaZMQ
     @@protocols = [:tcp, :inproc, :ipc] #, :pgm]
 
     def initialize
-      @socket = MaZMQ::context.socket(@@socket_type)
+      @socket = MaZMQ::context.socket(@socket_type)
       build_connection
     end
 
@@ -34,7 +34,7 @@ module MaZMQ
     end
 
     def socket_type
-      @@socket_type
+      @socket_type
     end
 
     def on_read(&block)
@@ -47,9 +47,9 @@ module MaZMQ
       @connection.on_write(block)
     end
 
-    def self.socket_type(socket_type)
-      @@socket_type = socket_type
-    end
+    #def self.socket_type(socket_type)
+    #  @@socket_type = socket_type
+    #end
 
     protected
     def self.valid_protocol?(protocol)

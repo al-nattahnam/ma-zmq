@@ -1,5 +1,4 @@
 require 'eventmachine'
-#require 'em-zeromq'
 require 'ffi-rzmq'
 
 require 'ma-zmq/round_robin'

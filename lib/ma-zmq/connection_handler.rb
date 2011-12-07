@@ -16,7 +16,7 @@ module MaZMQ
     end
 
     def notify_readable
-      if @socket_handler.socket_type == ZMQ::REP
+      if @socket_handler.socket_type == ZMQ::REP or @socket_handler.socket_type == ZMQ::REQ
         msg = try_read
         if msg
           @on_read_lambda.call(msg)
@@ -25,7 +25,7 @@ module MaZMQ
     end
 
     def notify_writable
-      if @socket_handler.socket_type == ZMQ::REQ
+      if @socket_handler.socket_type == ZMQ::REQ or @socket_handler.socket_type == ZMQ::REP
         msg = try_read
         if msg
           @on_read_lambda.call(msg)
