@@ -37,7 +37,7 @@ module MaZMQ
       @socket_handler.on_read(block)
     end
 
-    def on_write(block)
+    def on_write(&block)
       return false if block.arity != 1
       @socket_handler.on_write(block)
     end

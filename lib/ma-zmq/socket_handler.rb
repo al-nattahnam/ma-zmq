@@ -6,12 +6,12 @@ module MaZMQ
       @connection.notify_writable = true
     end
 
-    def on_read(&block)
+    def on_read(block)
       return false if block.arity != 1
       @connection.on_read(block)
     end
 
-    def on_write(&block)
+    def on_write(block)
       return false if block.arity != 1
       @connection.on_write(block)
     end

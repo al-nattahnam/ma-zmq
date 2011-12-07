@@ -10,7 +10,7 @@ module MaZMQ
       @on_read_lambda = block
     end
 
-    def on_write(&block)
+    def on_write(block)
       @on_write_lambda = block
     end
 
