@@ -32,7 +32,7 @@ module MaZMQ
       @@socket_type
     end
 
-    def on_read(block)
+    def on_read(&block)
       return false if block.arity != 1
       @socket_handler.on_read(block)
     end
