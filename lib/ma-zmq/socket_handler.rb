@@ -42,7 +42,6 @@ module MaZMQ
       @@socket_type = socket_type
     end
 
-
     protected
     def self.valid_protocol?(protocol)
       @@protocols.include? protocol

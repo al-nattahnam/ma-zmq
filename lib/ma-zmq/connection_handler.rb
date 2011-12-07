@@ -28,7 +28,7 @@ module MaZMQ
       if @socket_handler.socket_type == ZMQ::REQ
         msg = try_read
         if msg
-          @on_write_lambda.call(msg)
+          @on_read_lambda.call(msg)
         end
       end
     end
