@@ -1,14 +1,10 @@
 module MaZMQ
-  class Socket
+  class SocketHandler
     @@protocols = [:tcp, :inproc, :ipc] #, :pgm]
 
-    def self.socket_type(socket_type)
-      @@socket_type = socket_type
-    end
-
-    def initialize()
+    def initialize
       @socket = MaZMQ::context.socket(@@socket_type)
-      @socket_handler = MaZMQ::SocketHandler.new(@socket)
+      build_connection
     end
 
     def connect(protocol, address, port)
@@ -42,9 +38,27 @@ module MaZMQ
       @socket_handler.on_write(block)
     end
 
+    def self.socket_type(socket_type)
+      @@socket_type = socket_type
+    end
+
+
     protected
     def self.valid_protocol?(protocol)
       @@protocols.include? protocol
+    end
+
+    private
+    def build_connection
+      fd = []
+      @socket.getsockopt(ZMQ::FD, fd)
+
+      return nil if not ZMQ::Util.resultcode_ok? fd[0]
+
+      @connection = EM.watch(fd[0], MaZMQ::ConnectionHandler, self)
+      @connection.notify_readable = true
+      @connection.notify_writable = true
+      @connection
     end
   end
 end

@@ -1,7 +1,8 @@
 module MaZMQ
   class ConnectionHandler < EM::Connection
-    def initialize(socket)
-      @socket = socket
+    def initialize(socket_handler)
+      @socket_handler = socket_handler
+
       @on_read_lambda = lambda {|m|}
       @on_write_lambda = lambda {|m|}
     end
@@ -15,7 +16,7 @@ module MaZMQ
     end
 
     def notify_readable
-      if @socket.socket_type == ZMQ::REP
+      if @socket_handler.socket_type == ZMQ::REP
         msg = try_read
         if msg
           @on_read_lambda.call(msg)
@@ -24,7 +25,7 @@ module MaZMQ
     end
 
     def notify_writable
-      if @socket.socket_type == ZMQ::REQ
+      if @socket_handler.socket_type == ZMQ::REQ
         msg = try_read
         if msg
           @on_write_lambda.call(msg)
@@ -33,7 +34,7 @@ module MaZMQ
     end
 
     def try_read
-      msg = @socket.recv_string
+      msg = @socket_handler.recv_string
       if msg.empty?
         return false
       else
