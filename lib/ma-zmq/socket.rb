@@ -10,7 +10,7 @@ module MaZMQ
       @socket = MaZMQ::context.socket(@@socket_type)
 
       @connection = build_em_connection
-      @connection.register_readable
+      @connection.notify_readable = true
       #@em_handler = bla
     end
 
@@ -19,6 +19,10 @@ module MaZMQ
       @socket.getsockopt(ZMQ::FD, fd)
       return nil if not ZMQ::Util.resultcode_ok? fd[0]
       EM.watch(fd[0], MaZMQ::Handler)
+    end
+
+    def notify_readable
+      recv_string
     end
 
     def connect(protocol, address, port)
