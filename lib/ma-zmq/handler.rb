@@ -5,6 +5,7 @@ module MaZMQ
     end
 
     def notify_readable
+      puts 'readable'
       msg = @socket.recv_string
       return unless msg
       puts msg
