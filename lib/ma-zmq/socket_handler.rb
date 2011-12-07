@@ -27,7 +27,7 @@ module MaZMQ
       fd = []
       @socket.getsockopt(ZMQ::FD, fd)
       return nil if not ZMQ::Util.resultcode_ok? fd[0]
-      EM.watch(fd[0], MaZMQ::ConnectionHandler, @socket)
+      EM.watch(fd[0], MaZMQ::ConnectionHandler, self)
     end
   end
 end
