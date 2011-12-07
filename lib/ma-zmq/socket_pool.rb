@@ -1,10 +1,9 @@
 module MaZMQ
   class SocketPool
     def initialize(context, ports)
-      @context = context # ZMQ::Context.new
       @sockets = []
       ports.each do |port|
-        @sockets << MaZMQ::Channel.new(@context, port, 1)
+        @sockets << MaZMQ::Channel.new(port, 1)
       end
   
       @current = available

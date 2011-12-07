@@ -4,10 +4,10 @@ module MaZMQ
   class Channel
     attr_accessor :state
   
-    def initialize(context, port, timeout = 1)
-      #@socket = context.socket ZMQ::REQ
-      #@socket.connect("tcp://127.0.0.1:#{port}")
-      @socket = context.connect(ZMQ::REQ, "tcp://127.0.0.1:#{port}").socket
+    def initialize(port, timeout = 1)
+      @socket = MaZMQ::context.socket ZMQ::REQ
+      @socket.connect("tcp://127.0.0.1:#{port}")
+      #@socket = context.connect(ZMQ::REQ, "tcp://127.0.0.1:#{port}") #.socket
   
       @timeout = timeout
       @state = :idle

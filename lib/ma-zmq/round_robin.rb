@@ -4,12 +4,12 @@ module MaZMQ
 
     # Aprovechar el tiempo de timeout para seguir mandando a los restantes
 
-    def initialize(context, ports=[])
+    def initialize(ports=[])
       # [] rr.connect('tcp://127.0.0.1')
       # only REQ / REP pattern
 
       @current_message = nil
-      @socket_pool = MaZMQ::SocketPool.new(context, ports)
+      @socket_pool = MaZMQ::SocketPool.new(ports)
 
       @response = nil
     end
