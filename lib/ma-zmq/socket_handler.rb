@@ -30,12 +30,12 @@ module MaZMQ
 
     def on_read(&block)
       return false if block.arity != 1
-      @socket_handler.on_read(block)
+      @connection.on_read(block)
     end
 
     def on_write(&block)
       return false if block.arity != 1
-      @socket_handler.on_write(block)
+      @connection.on_write(block)
     end
 
     def self.socket_type(socket_type)
