@@ -5,14 +5,22 @@ module MaZMQ
     end
 
     def notify_readable
-      puts 'readable'
-      msg = @socket.recv_string
-      return unless msg
-      puts msg
+      if @socket.socket_type == ZMQ::REP
+        try_read
+      end
     end
 
     def notify_writable
-      puts 'writable'
+      if @socket.socket_type == ZMQ::REQ
+        try_read
+      end
+    end
+
+    def try_read
+      msg = @socket.recv_string
+      if not msg.empty?
+        puts msg
+      end
     end
   end
 end

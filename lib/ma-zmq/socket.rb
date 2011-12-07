@@ -11,7 +11,7 @@ module MaZMQ
 
       @connection = build_em_connection
       @connection.notify_readable = true
-      #@connection.notify_writable = true
+      @connection.notify_writable = true
       #@em_handler = bla
     end
 
@@ -21,10 +21,6 @@ module MaZMQ
       return nil if not ZMQ::Util.resultcode_ok? fd[0]
       EM.watch(fd[0], MaZMQ::Handler, self)
     end
-
-    #def notify_readable
-    #  recv_string
-    #end
 
     def connect(protocol, address, port)
       return false if not MaZMQ::Socket.valid_protocol?(protocol)
@@ -38,9 +34,13 @@ module MaZMQ
     end
 
     def recv_string
-      msg = nil
+      msg = ''
       @socket.recv_string(msg, ZMQ::NOBLOCK)
       msg
+    end
+
+    def socket_type
+      @@socket_type
     end
 
     def on_read(&block)
