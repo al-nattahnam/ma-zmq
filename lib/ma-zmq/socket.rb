@@ -18,7 +18,7 @@ module MaZMQ
       fd = []
       @socket.getsockopt(ZMQ::FD, fd)
       return nil if not ZMQ::Util.resultcode_ok? fd[0]
-      EM.watch(fd[0], MaZMQ::Handler.new, self)
+      EM.watch(fd[0], MaZMQ::Handler, self)
     end
 
     def notify_readable

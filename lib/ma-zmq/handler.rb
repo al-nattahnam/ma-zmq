@@ -5,7 +5,7 @@ module MaZMQ
     end
 
     def notify_readable
-      puts 'readable'
+      puts @socket.recv_string
     end
 
     def notify_writable
