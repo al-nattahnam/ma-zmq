@@ -3,9 +3,9 @@ module MaZMQ
     # mergear con RoundRobin
     #socket_type ZMQ::REP
 
-    def initialize
+    def initialize(use_eventmachine=true)
       @socket_type = ZMQ::REP
-      super
+      super(use_eventmachine)
     end
   end
 end

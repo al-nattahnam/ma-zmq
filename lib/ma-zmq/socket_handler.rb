@@ -2,9 +2,13 @@ module MaZMQ
   class SocketHandler
     @@protocols = [:tcp, :inproc, :ipc] #, :pgm]
 
-    def initialize
+    def initialize(use_eventmachine=true)
       @socket = MaZMQ::context.socket(@socket_type)
-      build_connection
+      if use_eventmachine
+        build_connection
+      else
+        @connection = false
+      end
     end
 
     def connect(protocol, address, port)
@@ -38,12 +42,12 @@ module MaZMQ
     end
 
     def on_read(&block)
-      return false if block.arity != 1
+      return false if not @connection or block.arity != 1
       @connection.on_read(block)
     end
 
     def on_write(&block)
-      return false if block.arity != 1
+      return false if not @connection or block.arity != 1
       @connection.on_write(block)
     end
 
