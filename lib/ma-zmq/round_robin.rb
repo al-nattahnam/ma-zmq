@@ -1,64 +1,64 @@
 module MaZMQ
   class RoundRobin
-    include EM::Deferrable
-
     # Aprovechar el tiempo de timeout para seguir mandando a los restantes
 
-    def initialize(ports=[])
+    def initialize(ports=[], use_em=true)
       # [] rr.connect('tcp://127.0.0.1')
       # only REQ / REP pattern
 
       @current_message = nil
-      @socket_pool = MaZMQ::SocketPool.new(ports)
+      @use_em = use_em
+      @handler = MaZMQ::HandlerPool.new(ports, @use_em)
 
-      @response = nil
+      @timeout = nil # TODO individual timeouts for different sockets
+      @state = :idle
     end
 
-    def send_with(msg)
-      @current_message = msg
-      self.send_string
-      self.add_callback
+    def timeout(secs)
+      @timeout = secs
+      @handler.timeout(secs)
     end
 
-    def send_string
-      puts "rr: send #{@current_message}"
-      @socket_pool.send_string(@current_message)
-      if state == :sending
-        succeed
+    def send_string(msg)
+      case @state
+        when :idle
+          @current_message = msg
+          @state = :sending
+          @handler.send_string(@current_message)
+        when :retry
+          @state = :sending
+          @handler.send_string(@current_message)
+        when :sending
+          return false
       end
     end
 
     def recv_string
-      puts "rr: recv"
-      message = @socket_pool.recv_string
-      if state == :idle
-        @socket_pool.rotate!
-        succeed
-        @response = @socket_pool.message
-        puts "rr: recvd #{@response}"
-        @current_message = nil
-      elsif state == :timeout
-        puts 'rr: timeout!'
-        @socket_pool.rotate!(true)
-        self.fail
+      msg = @handler.recv_string
+      if @timeout and @handler.state == :timeout
+        @handler.rotate!
+        @state = :retry
+        @handler.send_string @current_message
+        return false
+      end
+      return msg
+    end
+
+    def on_timeout(&block)
+      @handler.on_timeout do
+        @handler.rotate!
+        @state = :retry
+        @handler.send_string @current_message
+        block.call
       end
     end
 
-    def add_callback
-      callback {
-        recv_string
-        callback {
-          puts '[ready]'
-        }
-        errback {
-          puts '[fail]'
-          send_with @current_message
-        }
+    def on_read(&block)
+      @handler.on_read{ |msg|
+        @handler.rotate!
+        @state = :idle
+        block.call(msg)
       }
-    end
-
-    def state
-      @socket_pool.state
     end
   end
 end

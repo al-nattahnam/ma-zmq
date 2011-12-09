@@ -30,13 +30,6 @@ module MaZMQ
     end
   
     def recv_string
-      #@current.on_timeout {
-      #  return :timeout
-      #}
-      #@current.on_read { |msg|
-      #  return msg
-      #}
-
       case state
         when :idle
           return false
@@ -61,7 +54,9 @@ module MaZMQ
     def on_timeout(&block)
       return false if not @use_em
       @sockets.each do |socket|
-        socket.on_timeout{block.call}
+        socket.on_timeout {
+          block.call
+        }
       end
     end
   
