@@ -34,7 +34,7 @@ module MaZMQ
     def recv_string
       msg = ''
       @socket.recv_string(msg, ZMQ::NOBLOCK)
-      msg
+      return msg
     end
 
     def socket_type
