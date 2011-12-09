@@ -10,7 +10,12 @@ Hope you enjoy it !
 
   EM.run do
     request = MaZMQ::Request.new
+    request.timeout(5)
     request.connect(:tcp, '127.0.0.1', 3200)
+
+    request.on_timeout {
+      puts "Server has no response!"
+    }
     request.on_read { |msg|
       puts "Received: #{msg}"
     }
