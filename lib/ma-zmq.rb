@@ -4,9 +4,6 @@ require 'ffi-rzmq'
 require 'ma-zmq/round_robin'
 require 'ma-zmq/handler_pool'
 
-#require 'ma-zmq/socket_pool'
-#require 'ma-zmq/channel'
-
 require 'ma-zmq/connection_handler'
 require 'ma-zmq/socket_handler'
 
