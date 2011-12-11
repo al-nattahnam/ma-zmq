@@ -6,12 +6,14 @@ module MaZMQ
     # directed
     # priorities
 
+    # Split LoadBalancer / Backend
+
     def initialize(use_em=true)
       @current_message = nil
       @use_em = use_em
 
       @sockets = []
-      @current = available
+      #@current = available
 
       @timeout = nil # TODO individual timeouts for different sockets
       @state = :idle
@@ -19,12 +21,25 @@ module MaZMQ
       # @max_timeouts = 5 # TODO
       # @max_timeouted = 1
       # @max_retries
+
+      # load_balancer itself
+      @on_timeout_lambda = lambda {}
+      @on_read_lambda = lambda {|m|}
     end
 
     def connect(protocol, address, port)
       # validate as in SocketHandler
       request = MaZMQ::Request.new(@use_em)
       request.connect(protocol, address, port)
+      if @use_em
+        request.timeout(@timeout)
+        request.on_read { |msg|
+          @on_read_lambda.call(msg)
+        }
+        request.on_timeout {
+          @on_timeout_lambda.call
+        }
+      end
       @sockets << request
 
       @current ||= available
@@ -70,23 +85,36 @@ module MaZMQ
 
     def on_timeout(&block)  
       return false if not @use_em
+      @on_timeout_lambda = lambda {
+        self.rotate!(true)
+        @state = :retry
+        self.send_string @current_message
+        block.call
+      }
       @sockets.each do |socket|
         socket.on_timeout {
-          self.rotate!(true)
-          @state = :retry
-          self.send_string @current_message
-          block.call
+          @on_timeout_lambda.call
+          #self.rotate!(true)
+          #@state = :retry
+          #self.send_string @current_message
+          #block.call
         }
       end
     end
 
     def on_read(&block)
       return false if not @use_em
+      @on_read_lambda = lambda {|msg|
+        self.rotate!
+        @state = :idle
+        block.call(msg)
+      }
       @sockets.each do |socket|
         socket.on_read { |msg|
-          self.rotate!
-          @state = :idle
-          block.call(msg)
+          @on_read_lambda.call(msg)
+          #self.rotate!
+          #@state = :idle
+          #block.call(msg)
         }
       end
     end
