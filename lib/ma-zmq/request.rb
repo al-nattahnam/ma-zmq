@@ -6,7 +6,6 @@ module MaZMQ
     def initialize(use_eventmachine=true)
       @socket_type = ZMQ::REQ
 
-      @state = :idle
       @last_try = nil
 
       @timeout = false
@@ -15,6 +14,7 @@ module MaZMQ
     end
 
     def send_string(msg)
+      # check connection
       case @state
         when :idle
           super(msg)

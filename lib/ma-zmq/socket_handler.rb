@@ -9,6 +9,8 @@ module MaZMQ
       else
         @connection = false
       end
+      
+      @state = :unavailable
     end
 
     def connect(protocol, address, port)
@@ -17,6 +19,11 @@ module MaZMQ
 
       zmq_address = "#{protocol.to_s}://#{address}:#{port.to_s}"
       @socket.connect(zmq_address)
+      
+      if @state == :unavailable
+        @state = :idle
+      end
+      @state
     end
 
     def bind(protocol, address, port)
@@ -25,6 +32,11 @@ module MaZMQ
 
       zmq_address = "#{protocol.to_s}://#{address}:#{port.to_s}"
       @socket.bind(zmq_address)
+
+      if @state == :unavailable
+        @state = :idle
+      end
+      @state
     end
 
     def send_string(msg)
