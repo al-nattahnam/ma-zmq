@@ -30,6 +30,8 @@ module MaZMQ
       request = MaZMQ::Request.new(@use_em)
       request.connect(protocol, address, port)
       @sockets << request
+
+      @current ||= available
     end
 
     def timeout(secs)
@@ -60,9 +62,7 @@ module MaZMQ
         when :idle, :timeout then false
       end
 
-      #msg = @handler.recv_string
       if @timeout and @current.state == :timeout
-        #@handler.rotate!
         rotate!
         @state = :retry
         @current.send_string @current_message
