@@ -36,7 +36,7 @@ module MaZMQ
           @on_read_lambda.call(msg)
         else
           if @socket_handler.socket_type == ZMQ::REQ and @socket_handler.state == :timeout
-            @on_timeout_lambda.call
+            @on_timeout_lambda.call #(@socket_handler.identity)
             @socket_handler.idle!
           end
         end

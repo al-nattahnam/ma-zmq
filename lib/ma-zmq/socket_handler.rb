@@ -51,6 +51,17 @@ module MaZMQ
       @connection.on_write(block)
     end
 
+    def identity
+      # move to SocketHandler
+      arr = []
+      @socket.getsockopt(ZMQ::IDENTITY, arr)
+      arr[0].to_sym
+    end
+
+    def identity=(identity)
+      @socket.setsockopt(ZMQ::IDENTITY, identity.to_s)
+    end
+
     #def self.socket_type(socket_type)
     #  @@socket_type = socket_type
     #end

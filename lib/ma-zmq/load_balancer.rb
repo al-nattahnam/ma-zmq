@@ -1,6 +1,10 @@
 module MaZMQ
   class LoadBalancer
     # Aprovechar el tiempo de timeout para seguir mandando a los restantes
+    # roundrobin
+    # leastconnections
+    # directed
+    # priorities
 
     def initialize(use_em=true)
       @current_message = nil
