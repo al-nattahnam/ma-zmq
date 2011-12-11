@@ -1,14 +1,13 @@
 require 'eventmachine'
 require 'ffi-rzmq'
 
-require 'ma-zmq/round_robin'
-require 'ma-zmq/handler_pool'
-
 require 'ma-zmq/connection_handler'
 require 'ma-zmq/socket_handler'
 
 require 'ma-zmq/request'
 require 'ma-zmq/reply'
+
+require 'ma-zmq/load_balancer'
 
 module MaZMQ
   @@context = nil
