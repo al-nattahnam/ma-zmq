@@ -3,18 +3,10 @@ module MaZMQ
     # Aprovechar el tiempo de timeout para seguir mandando a los restantes
 
     def initialize(use_em=true)
-      # [] rr.connect('tcp://127.0.0.1')
-      # only REQ / REP pattern
-
       @current_message = nil
       @use_em = use_em
-      #@handler = MaZMQ::HandlerPool.new(ports, @use_em)
 
       @sockets = []
-      #ports.each do |port|
-      #  socket = MaZMQ::Request.new(use_em) # TODO debugging only
-      #end
-
       @current = available
 
       @timeout = nil # TODO individual timeouts for different sockets
@@ -36,9 +28,8 @@ module MaZMQ
 
     def timeout(secs)
       @timeout = secs
-      #@handler.timeout(secs)
       @sockets.each do |s|
-        s.timeout secs
+        s.timeout @timeout
       end
     end
 
@@ -58,16 +49,18 @@ module MaZMQ
 
     def recv_string
       msg = case @current.state
+        when :idle then false
         when :sending then @current.recv_string
-        when :idle, :timeout then false
+        when :timeout then false
       end
 
-      if @timeout and @current.state == :timeout
-        rotate!
-        @state = :retry
-        @current.send_string @current_message
-        return false
-      end
+      # chequear @use_em = false
+      #if @timeout and @current.state == :timeout
+      #  rotate!
+      #  @state = :retry
+      #  @current.send_string @current_message
+      #  return false
+      #end
       return msg
     end
 
@@ -75,7 +68,7 @@ module MaZMQ
       return false if not @use_em
       @sockets.each do |socket|
         socket.on_timeout {
-          self.rotate!
+          self.rotate!(true)
           @state = :retry
           self.send_string @current_message
           block.call
@@ -106,7 +99,6 @@ module MaZMQ
       end
   
       @current = available
-      #@state = :idle
     end
   end
 end
