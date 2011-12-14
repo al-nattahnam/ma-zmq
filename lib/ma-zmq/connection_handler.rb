@@ -30,17 +30,23 @@ module MaZMQ
     end
 
     def notify_writable
-      if @socket_handler.socket_type == ZMQ::REQ or @socket_handler.socket_type == ZMQ::REP
+      if ((@socket_handler.socket_type == ZMQ::REQ and @socket_handler.state != :timeout) or @socket_handler.socket_type == ZMQ::REP)
         msg = try_read
         if msg
           @on_read_lambda.call(msg)
         else
           if @socket_handler.socket_type == ZMQ::REQ and @socket_handler.state == :timeout
             @on_timeout_lambda.call #(@socket_handler.identity)
-            @socket_handler.idle!
+            puts "SocketHandler: #{@socket_handler.identity} timeout!"
+            self.detach
+            #self.notify_writable = false
+            #@socket_handler.idle!
+            return
           end
         end
+        #return
       end
+      #return
     end
 
     def try_read

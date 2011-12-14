@@ -64,10 +64,9 @@ module MaZMQ
     end
 
     def identity
-      # move to SocketHandler
       arr = []
       @socket.getsockopt(ZMQ::IDENTITY, arr)
-      arr[0].to_sym
+      arr[0].to_sym rescue nil
     end
 
     def identity=(identity)
@@ -91,7 +90,7 @@ module MaZMQ
       return nil if not ZMQ::Util.resultcode_ok? fd[0]
 
       @connection = EM.watch(fd[0], MaZMQ::ConnectionHandler, self)
-      @connection.notify_readable = true
+      #@connection.notify_readable = true
       @connection.notify_writable = true
       @connection
     end

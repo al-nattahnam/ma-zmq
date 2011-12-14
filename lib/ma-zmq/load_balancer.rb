@@ -8,19 +8,22 @@ module MaZMQ
 
     # Split LoadBalancer / Backend
 
+    @@id = 0
+
     def initialize(use_em=true)
-      @current_message = nil
+      #@current_message = nil
       @use_em = use_em
 
       @sockets = []
-      #@current = available
 
       @timeout = nil # TODO individual timeouts for different sockets
-      @state = :idle
+      #@state = :idle
 
       # @max_timeouts = 5 # TODO
       # @max_timeouted = 1
       # @max_retries
+
+      @index = []
 
       # load_balancer itself
       @on_timeout_lambda = lambda {}
@@ -40,9 +43,12 @@ module MaZMQ
           @on_timeout_lambda.call
         }
       end
+
+      request.identity = "lb-#{@@id}"
+      @@id += 1
       @sockets << request
 
-      @current ||= available
+      #@current ||= next_available
     end
 
     def timeout(secs)
@@ -53,25 +59,37 @@ module MaZMQ
     end
 
     def send_string(msg)
-      case @state
+      @current = next_available
+      return false if @current.is_a? NilClass
+      case @current.state
         when :idle
-          @current_message = msg
-          @state = :sending
-          @current.send_string(@current_message)
-        when :retry
-          @state = :sending
-          @current.send_string(@current_message)
-        when :sending
+          #puts "sent from: #{@current.object_id}"
+          @current.send_string(msg) #@current_message
+          self.rotate!
+        else
           return false
       end
+      #case @state
+      #  when :idle
+          #@current_message = msg
+          #@state = :sending
+          #@current.send_string(msg) #@current_message
+          #self.rotate!
+          #@current = next_available
+        #when :retry
+        #  @state = :sending
+        #  @current.send_string(@current_message)
+      #  when :sending
+      #    return false
+      #end
     end
 
-    def recv_string
-      msg = case @current.state
-        when :idle then false
-        when :sending then @current.recv_string
-        when :timeout then false
-      end
+    #def recv_string
+    #  msg = case @current.state
+    #    when :idle then false
+    #    when :sending then @current.recv_string
+    #    when :timeout then false
+    #  end
 
       # chequear @use_em = false
       #if @timeout and @current.state == :timeout
@@ -80,15 +98,14 @@ module MaZMQ
       #  @current.send_string @current_message
       #  return false
       #end
-      return msg
-    end
+    #  return msg
+    #end
 
     def on_timeout(&block)  
       return false if not @use_em
       @on_timeout_lambda = lambda {
-        self.rotate!(true)
-        @state = :retry
-        self.send_string @current_message
+        #@state = :retry
+        #self.send_string @current_message
         block.call
       }
       @sockets.each do |socket|
@@ -105,8 +122,8 @@ module MaZMQ
     def on_read(&block)
       return false if not @use_em
       @on_read_lambda = lambda {|msg|
-        self.rotate!
-        @state = :idle
+        #self.rotate!
+        #@state = :idle
         block.call(msg)
       }
       @sockets.each do |socket|
@@ -119,18 +136,20 @@ module MaZMQ
       end
     end
 
-    def available
-      @sockets.select{|s| s.state == :idle}.first
+    def next_available
+      @sockets.select{|s| s.state == :idle}.first || nil
     end
 
     def rotate!(timeout=false)
+      # TODO rotar un index, de este modo seria mas rapido que el push(shift)
+      # <- hacer benchmark entre uno y otro
       #@sockets.delete_at(0)
       @sockets.push(@sockets.shift)
-      if timeout
-        @sockets.delete_at(-1)
-      end
+      #if timeout
+      #  @sockets.delete_at(-1)
+      #end
   
-      @current = available
+      #@current = next_available
     end
   end
 end
