@@ -1,0 +1,19 @@
+10000 requests (@ 0.00001)
+
+c1
+--
+2x MaZMQ::Reply = 35 secs (285.71 req/s) 
+3x MaZMQ::Reply = 54 secs (185.18 req/s)
+4x MaZMQ::Reply = 63 secs (158.73 req/s) Mid performance
+
+c5
+--
+4x MaZMQ::Reply = 32 secs (312.50 req/s) Best performance
+3x MaZMQ::Reply = 35 secs (285.71 req/s)
+2x MaZMQ::Reply = 39 secs (256.41 req/s)
+
+c10
+---
+4x MaZMQ::Reply = 47 secs (212.76 req/s)
+3x MaZMQ::Reply = 54 secs (185.18 req/s)
+2x MaZMQ::Reply = 78 secs (128.20 req/s) Worst performance
