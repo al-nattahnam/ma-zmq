@@ -11,13 +11,11 @@ module MaZMQ
     @@id = 0
 
     def initialize(use_em=true)
-      #@current_message = nil
       @use_em = use_em
 
       @sockets = []
 
       @timeout = nil # TODO individual timeouts for different sockets
-      #@state = :idle
 
       # @max_timeouts = 5 # TODO
       # @max_timeouted = 1
@@ -47,8 +45,6 @@ module MaZMQ
       request.identity = "lb-#{@@id}"
       @@id += 1
       @sockets << request
-
-      #@current ||= next_available
     end
 
     def timeout(secs)
@@ -63,25 +59,11 @@ module MaZMQ
       return false if @current.is_a? NilClass
       case @current.state
         when :idle
-          #puts "sent from: #{@current.object_id}"
-          @current.send_string(msg) #@current_message
+          @current.send_string(msg)
           self.rotate!
         else
           return false
       end
-      #case @state
-      #  when :idle
-          #@current_message = msg
-          #@state = :sending
-          #@current.send_string(msg) #@current_message
-          #self.rotate!
-          #@current = next_available
-        #when :retry
-        #  @state = :sending
-        #  @current.send_string(@current_message)
-      #  when :sending
-      #    return false
-      #end
     end
 
     #def recv_string
@@ -111,10 +93,6 @@ module MaZMQ
       @sockets.each do |socket|
         socket.on_timeout {
           @on_timeout_lambda.call
-          #self.rotate!(true)
-          #@state = :retry
-          #self.send_string @current_message
-          #block.call
         }
       end
     end
@@ -142,7 +120,6 @@ module MaZMQ
 
     def rotate!(timeout=false)
       # TODO rotar un index, de este modo seria mas rapido que el push(shift)
-      # <- hacer benchmark entre uno y otro
       #@sockets.delete_at(0)
       @sockets.push(@sockets.shift)
       #if timeout
