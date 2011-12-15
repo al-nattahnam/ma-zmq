@@ -7,6 +7,7 @@ concurrency = 10
 per_fork = requests / concurrency
 
 @@sent = 0
+@@tries = 0
 @@read = 0
 
 concurrency.times {
@@ -24,14 +25,15 @@ EM.run do
     puts 'timeout!'
   }
   EM.add_periodic_timer(0.000001) do
-    if @@sent.to_f % 1000 == 0
-      puts "n: #{@@sent}"
-    end
+    #if @@sent.to_f % 1000 == 0
+    #  puts "n: #{@@sent}"
+    #end
+    @@tries += 1
     if req.send_string('test')
       @@sent += 1
     end
     if @@read.to_f % 1000 == 0
-      puts "R: #{@@read}"
+      #puts "R: #{@@read}"
     end
     if @@read >= per_fork
       EM.stop
@@ -39,6 +41,7 @@ EM.run do
   end
 end
 }
+puts @@read
+puts "Tries: #{@@tries}"
 end
 }
-#puts @@read
