@@ -1,7 +1,6 @@
 module MaZMQ
   class Request < MaZMQ::SocketHandler
-    # mergear con RoundRobin
-    #socket_type ZMQ::REQ
+    attr_reader :state
 
     def initialize(use_eventmachine=true)
       @socket_type = ZMQ::REQ
@@ -55,15 +54,6 @@ module MaZMQ
     def on_timeout(&block)
       return false if not @connection or block.arity != -1
       @connection.on_timeout(block)
-    end
-
-    def idle!
-      # count timeouts, timeouts available before :error
-      @state = :idle
-    end
-
-    def state
-      @state
     end
   end
 end

@@ -1,12 +1,13 @@
 module MaZMQ
   class LoadBalancer
-    # Aprovechar el tiempo de timeout para seguir mandando a los restantes
+    # LoadBalancer consistira en el indice y referencia a los sockets del backend
     # roundrobin
     # leastconnections
     # directed
     # priorities
 
     # Split LoadBalancer / Backend
+    # TODO Chequear cantidad de request que maneja cada Reply y los que recibe el LoadBalancer
 
     @@id = 0
 
@@ -14,14 +15,13 @@ module MaZMQ
       @use_em = use_em
 
       @sockets = []
+      @index = []
 
       @timeout = nil # TODO individual timeouts for different sockets
 
       # @max_timeouts = 5 # TODO
       # @max_timeouted = 1
       # @max_retries
-
-      @index = []
 
       # load_balancer itself
       @on_timeout_lambda = lambda {}
@@ -86,8 +86,6 @@ module MaZMQ
     def on_timeout(&block)  
       return false if not @use_em
       @on_timeout_lambda = lambda {
-        #@state = :retry
-        #self.send_string @current_message
         block.call
       }
       @sockets.each do |socket|
@@ -100,16 +98,11 @@ module MaZMQ
     def on_read(&block)
       return false if not @use_em
       @on_read_lambda = lambda {|msg|
-        #self.rotate!
-        #@state = :idle
         block.call(msg)
       }
       @sockets.each do |socket|
         socket.on_read { |msg|
           @on_read_lambda.call(msg)
-          #self.rotate!
-          #@state = :idle
-          #block.call(msg)
         }
       end
     end
