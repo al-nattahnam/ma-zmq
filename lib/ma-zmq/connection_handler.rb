@@ -2,6 +2,7 @@ module MaZMQ
   class ConnectionHandler < EM::Connection
     def initialize(socket_handler)
       @socket_handler = socket_handler
+      @socket_type = socket_handler.socket_type
 
       @on_read_lambda = lambda {|m|}
       @on_write_lambda = lambda {|m|}
@@ -21,36 +22,39 @@ module MaZMQ
     end
 
     def notify_readable
-      if @socket_handler.socket_type == ZMQ::REP
-        msg = try_read
-        if msg
-          @on_read_lambda.call(msg)
-        end
-      end
+      #if @socket_handler.socket_type == ZMQ::REP
+      #  if @socket_handler.state == :idle
+      #    msg = try_read
+      #    if msg
+      #      @on_read_lambda.call(msg)
+      #    end
+      #  end
+      #end
     end
 
     def notify_writable
-      if ((@socket_handler.socket_type == ZMQ::REQ and @socket_handler.state == :sending) or @socket_handler.socket_type == ZMQ::REP)
-        msg = try_read
-        if msg
-          @on_read_lambda.call(msg)
-        else
-          if @socket_handler.socket_type == ZMQ::REQ and @socket_handler.state == :timeout
-            @on_timeout_lambda.call #(@socket_handler.identity)
-            puts "SocketHandler: #{@socket_handler.identity} timeout!"
-            self.detach
-            return
+      case @socket_type
+        when ZMQ::REP
+          if @socket_handler.state == :idle
+            msg = @socket_handler.recv_string
+            if msg and not msg.empty?
+              @on_read_lambda.call(msg)
+            end
           end
-        end
-      end
-    end
-
-    def try_read
-      msg = @socket_handler.recv_string
-      if msg and not msg.empty?
-        return msg
-      else
-        return false
+        when ZMQ::REQ
+          if @socket_handler.state == :sending
+            msg = @socket_handler.recv_string
+          end
+          case @socket_handler.state
+            when :idle
+              if msg and not msg.empty?
+                @on_read_lambda.call(msg)
+              end
+            when :timeout
+              @on_timeout_lambda.call #(@socket_handler.identity)
+              puts "SocketHandler: #{@socket_handler.identity} timeout!"
+              self.detach
+          end
       end
     end
   end
