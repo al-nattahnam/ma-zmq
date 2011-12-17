@@ -13,7 +13,6 @@ module MaZMQ
     end
 
     def send_string(msg)
-      # check connection
       case @state
         when :idle
           super(msg)
