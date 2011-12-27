@@ -4,6 +4,7 @@ module MaZMQ
 
     def initialize(use_eventmachine=true)
       @socket = MaZMQ::context.socket(@socket_type)
+      @addresses = []
       if use_eventmachine
         build_connection
       else
@@ -19,6 +20,8 @@ module MaZMQ
 
       zmq_address = "#{protocol.to_s}://#{address}:#{port.to_s}"
       @socket.connect(zmq_address)
+
+      @addresses << zmq_address
       
       if @state == :unavailable
         @state = :idle
@@ -33,10 +36,16 @@ module MaZMQ
       zmq_address = "#{protocol.to_s}://#{address}:#{port.to_s}"
       @socket.bind(zmq_address)
 
+      @addresses << zmq_address
+
       if @state == :unavailable
         @state = :idle
       end
       @state
+    end
+
+    def addresses
+      @addresses
     end
 
     def send_string(msg)

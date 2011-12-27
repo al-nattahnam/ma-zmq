@@ -27,6 +27,7 @@ module MaZMQ
     end
 
     def connect(protocol, address, port)
+      return false if addresses.include? "#{protocol}://#{address}:#{port.to_s}"
       index = super(protocol, address, port)
       @balancer.add(index)
     end
@@ -34,6 +35,10 @@ module MaZMQ
     def disconnect(index)
       @balancer.remove(index)
       super(index)
+    end
+
+    def addresses
+      @sockets.collect{|s| s.addresses}.flatten
     end
 
     def current_socket
