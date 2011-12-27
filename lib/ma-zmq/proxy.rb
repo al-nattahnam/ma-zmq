@@ -20,10 +20,10 @@ module MaZMQ
       case @current.state
         when :idle
           @current.send_string(msg)
-          @balancer.next
         else
           return false
       end
+      @balancer.next
     end
 
     def connect(protocol, address, port)
