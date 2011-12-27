@@ -19,7 +19,7 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 1.0.0)
-  eventmachine
+  eventmachine (= 0.12.10)
   ffi-rzmq (= 0.9.3)
   jeweler (~> 1.6.4)
   rcov
