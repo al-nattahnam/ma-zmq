@@ -3,7 +3,7 @@ require 'ma-zmq'
 require 'benchmark'
 #require 'ruby-prof'
 
-requests = 100
+requests = 10000
 concurrency = 5
 per_fork = requests / concurrency
 
@@ -16,11 +16,12 @@ concurrency.times {
     puts Benchmark.realtime {
     #result = RubyProf.profile {
       EM.run do
-        req = MaZMQ::LoadBalancer.new
+        req = MaZMQ::Proxy.new
         req.connect :tcp, '127.0.0.1', 3340
         req.connect :tcp, '127.0.0.1', 3341
-        #req.connect :tcp, '127.0.0.1', 3342
-        #req.connect :tcp, '127.0.0.1', 3343
+        req.connect :tcp, '127.0.0.1', 3342
+        req.connect :tcp, '127.0.0.1', 3343
+        req.connect :tcp, '127.0.0.1', 3343
 
         #req.connect :tcp, '127.0.0.1', 3344
         #req.connect :tcp, '127.0.0.1', 3345
