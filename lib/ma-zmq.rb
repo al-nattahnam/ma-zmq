@@ -8,6 +8,7 @@ require 'ma-zmq/request'
 require 'ma-zmq/reply'
 
 require 'ma-zmq/proxy/backend'
+require 'ma-zmq/proxy/balancer'
 require 'ma-zmq/proxy'
 
 module MaZMQ
