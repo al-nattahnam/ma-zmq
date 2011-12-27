@@ -12,6 +12,7 @@ module MaZMQ
       def initialize
         self.strategy = :round_robin # default strategy is round_robin
         @index = []
+        # @data = [] # connections, load
       end
       
       def strategy=(strategy)
