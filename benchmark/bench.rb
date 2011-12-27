@@ -1,9 +1,9 @@
 require 'rubygems'
 require 'ma-zmq'
 require 'benchmark'
-require 'ruby-prof'
+#require 'ruby-prof'
 
-requests = 10000
+requests = 100
 concurrency = 5
 per_fork = requests / concurrency
 
@@ -19,9 +19,13 @@ concurrency.times {
         req = MaZMQ::LoadBalancer.new
         req.connect :tcp, '127.0.0.1', 3340
         req.connect :tcp, '127.0.0.1', 3341
-        req.connect :tcp, '127.0.0.1', 3342
-        req.connect :tcp, '127.0.0.1', 3343
-        req.connect :tcp, '127.0.0.1', 3344
+        #req.connect :tcp, '127.0.0.1', 3342
+        #req.connect :tcp, '127.0.0.1', 3343
+
+        #req.connect :tcp, '127.0.0.1', 3344
+        #req.connect :tcp, '127.0.0.1', 3345
+        #req.connect :tcp, '127.0.0.1', 3346
+        #req.connect :tcp, '127.0.0.1', 3347
         req.timeout(0.5)
         req.on_read { |m|
           @@read += 1

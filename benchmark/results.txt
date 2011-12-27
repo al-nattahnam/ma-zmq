@@ -17,3 +17,7 @@ c10
 4x MaZMQ::Reply = 39 secs (256.41 req/s)
 3x MaZMQ::Reply = 54 secs (185.18 req/s)
 2x MaZMQ::Reply = 78 secs (128.20 req/s) Worst performance
+
+c20 (r1.9.2)
+---
+8x MaZMQ::Reply = 7.8 secs (1282 req/s)
