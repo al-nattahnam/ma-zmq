@@ -7,7 +7,8 @@ require 'ma-zmq/socket_handler'
 require 'ma-zmq/request'
 require 'ma-zmq/reply'
 
-require 'ma-zmq/load_balancer'
+require 'ma-zmq/proxy/backend'
+require 'ma-zmq/proxy'
 
 module MaZMQ
   @@context = nil
