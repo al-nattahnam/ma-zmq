@@ -6,9 +6,6 @@ module MaZMQ
 
         @use_em = use_em
         @timeout = nil # TODO individual timeouts for different sockets
-
-        @on_timeout_lambda = lambda {}
-        @on_read_lambda = lambda {|m|}
       end
 
       def connect(protocol, address, port)
@@ -17,17 +14,30 @@ module MaZMQ
         request.connect(protocol, address, port)
         if @use_em
           request.timeout(@timeout)
-          request.on_read { |msg|
-            @on_read_lambda.call(msg)
-          }
-          request.on_timeout {
-            @on_timeout_lambda.call
-          }
+          if @on_read_lambda.is_a? Proc
+            request.on_read { |msg|
+              @on_read_lambda.call(msg)
+            }
+          end
+          if @on_timeout_lambda.is_a? Proc
+            request.on_timeout {
+              @on_timeout_lambda.call
+            }
+          end
         end
 
         #request.identity = "lb-#{@@id}"
         #@@id += 1
         @sockets << request
+        @sockets.size - 1
+      end
+
+      #def reconnect(index)
+      #end
+
+      def disconnect(index)
+        socket = @sockets.delete_at(index)
+        socket.close
       end
 
       def timeout(secs)

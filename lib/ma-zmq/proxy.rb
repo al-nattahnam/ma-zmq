@@ -2,12 +2,9 @@ module MaZMQ
   class Proxy
     include MaZMQ::Proxy::Backend
 
-    @@id = 0
+    #@@id = 0
 
     def initialize(use_em=true)
-
-      #@index = []
-
       @balancer = MaZMQ::Proxy::Balancer.new
 
       # @max_timeouts = 5 # TODO
@@ -30,8 +27,13 @@ module MaZMQ
     end
 
     def connect(protocol, address, port)
-      super(protocol, address, port)
-      @balancer.add(@sockets.size - 1)
+      index = super(protocol, address, port)
+      @balancer.add(index)
+    end
+
+    def disconnect(index)
+      @balancer.remove(index)
+      super(index)
     end
 
     def current_socket

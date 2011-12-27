@@ -3,9 +3,9 @@ module MaZMQ
     class Balancer
       @@strategies = [
         :round_robin,
-        :least_connections,
-        :load_balanced, # Cucub podria usar algo como 'less_jobs'
-        :priorities,
+        :connections,
+        :load, # Cucub podria usar algo como 'less_jobs'
+        :priority,
         :directed
       ]
 
@@ -23,12 +23,19 @@ module MaZMQ
         @index << index
       end
 
+      def remove(index)
+        @index.delete(index)
+      end
+
       def current
         @index[0]
       end
 
       def next
-        @index.push(@index.shift)
+        case @strategy
+          when :round_robin
+            @index.push(@index.shift)
+        end
       end
     end
   end
