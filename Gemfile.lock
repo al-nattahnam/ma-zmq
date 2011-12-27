@@ -1,6 +1,10 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    eventmachine (0.12.10)
+    ffi (1.0.11)
+    ffi-rzmq (0.9.3)
+      ffi
     git (1.2.5)
     jeweler (1.6.4)
       bundler (~> 1.0)
@@ -15,6 +19,8 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 1.0.0)
+  eventmachine
+  ffi-rzmq (= 0.9.3)
   jeweler (~> 1.6.4)
   rcov
   shoulda
