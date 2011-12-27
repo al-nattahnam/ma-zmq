@@ -23,24 +23,19 @@ module MaZMQ
       case @current.state
         when :idle
           @current.send_string(msg)
-          next_socket
+          @balancer.next
         else
           return false
       end
     end
 
-    #def current_socket
-    #  @sockets.select{|s| s.state == :idle}.first || nil
-    #end
+    def connect(protocol, address, port)
+      super(protocol, address, port)
+      @balancer.add(@sockets.size - 1)
+    end
 
-    #def next_available
-    #  @sockets.select{|s| s.state == :idle}.first || nil
-    #end
-
-    def next_socket(index)
-      # TODO rotar un index, de este modo seria mas rapido que el push(shift)
-      #@sockets.delete_at(0)
-      @sockets.push(@sockets.shift)
+    def current_socket
+      @sockets[@balancer.current]
     end
   end
 end

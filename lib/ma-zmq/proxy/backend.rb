@@ -25,8 +25,8 @@ module MaZMQ
           }
         end
 
-        request.identity = "lb-#{@@id}"
-        @@id += 1
+        #request.identity = "lb-#{@@id}"
+        #@@id += 1
         @sockets << request
       end
 

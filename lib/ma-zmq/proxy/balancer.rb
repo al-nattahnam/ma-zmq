@@ -19,11 +19,15 @@ module MaZMQ
         @strategy = strategy
       end
 
-      def current_index
+      def add(index)
+        @index << index
+      end
+
+      def current
         @index[0]
       end
 
-      def next_index
+      def next
         @index.push(@index.shift)
       end
     end
