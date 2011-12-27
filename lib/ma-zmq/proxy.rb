@@ -30,6 +30,7 @@ module MaZMQ
       return false if addresses.include? "#{protocol}://#{address}:#{port.to_s}"
       index = super(protocol, address, port)
       @balancer.add(index)
+      index
     end
 
     def disconnect(index)
