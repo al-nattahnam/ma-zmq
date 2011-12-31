@@ -83,21 +83,34 @@ module MaZMQ
     end
 
     protected
-    def self.valid_protocol?(protocol)
-      @@protocols.include? protocol
-    end
-
-    def self.valid_address(prot, addr, port)
-      case prot
-        when :tpc
-          return "#{prot.to_s}://#{addr}:#{port.to_s}"
+    def self.valid_address(protocol, address, port=nil)
+      case protocol
+        when :tcp
+          if port.is_a? Numeric
+            return "#{protocol}://#{address}:#{port.to_s}"
+          else
+            return false
+          end
         when :ipc
-          return "#{prot.to_s}://#{addr}"
+          # Chequear socket file
+          if port.is_a? NilClass
+            return "#{protocol}://#{address}"
+          else
+            return false
+          end
         when :inproc
-          return "#{prot.to_s}://#{addr}"
+          if port.is_a? NilClass
+            return "#{protocol}://#{address}"
+          else
+            return false
+          end
       end
     end
 
+    def self.valid_protocol?(protocol)
+      @@protocols.include? protocol
+    end
+    
     private
     def build_connection
       fd = []
