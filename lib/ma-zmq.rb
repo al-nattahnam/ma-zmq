@@ -18,4 +18,8 @@ module MaZMQ
     @@context ||= ZMQ::Context.new
     @@context
   end
+
+  def self.terminate
+    @@context.terminate if @@context
+  end
 end
