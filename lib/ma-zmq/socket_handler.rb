@@ -10,6 +10,7 @@ module MaZMQ
       else
         @connection = false
       end
+      @recv_flags = (use_eventmachine ? ZMQ::NOBLOCK : 0)
       
       @state = :unavailable
     end
@@ -29,11 +30,11 @@ module MaZMQ
       @state
     end
 
-    def bind(protocol, address, port)
+    def bind(protocol, address, port=nil)
       # check once binded should not bind anymore
-      return false if not MaZMQ::SocketHandler.valid_protocol?(protocol)
+      zmq_address = MaZMQ::SocketHandler.valid_address(protocol, address, port)
+      return false if not zmq_address.is_a? String
 
-      zmq_address = "#{protocol.to_s}://#{address}:#{port.to_s}"
       @socket.bind(zmq_address)
 
       @addresses << zmq_address
@@ -44,6 +45,10 @@ module MaZMQ
       @state
     end
 
+    def close
+      @socket.close
+    end
+
     def addresses
       @addresses
     end
@@ -52,9 +57,9 @@ module MaZMQ
       @socket.send_string(msg)
     end
 
-    def recv_string
+    def recv_string#(flags=nil)
       msg = ''
-      @socket.recv_string(msg, ZMQ::NOBLOCK)
+      @socket.recv_string(msg, @recv_flags)
       return msg
     end
 
