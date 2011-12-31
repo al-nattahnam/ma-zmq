@@ -12,6 +12,14 @@ module MaZMQ
       super(use_eventmachine)
     end
 
+    def reconnect
+      close
+      @socket = MaZMQ::context.socket(@socket_type)
+      @addresses.each do |zmq_address|
+        @socket.connect zmq_address
+      end
+    end
+
     def send_string(msg)
       case @state
         when :idle
