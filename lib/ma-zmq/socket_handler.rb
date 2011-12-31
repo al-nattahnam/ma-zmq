@@ -14,9 +14,9 @@ module MaZMQ
       @state = :unavailable
     end
 
-    def connect(protocol, address, port)
+    def connect(protocol, address, port=nil)
       # check multiple connects for ZMQ::REQ should RoundRobin
-      return false if not MaZMQ::SocketHandler.valid_protocol?(protocol)
+      return false if not MaZMQ::SocketHandler.valid_address?(protocol, address, port)
 
       zmq_address = "#{protocol.to_s}://#{address}:#{port.to_s}"
       @socket.connect(zmq_address)
@@ -85,6 +85,17 @@ module MaZMQ
     protected
     def self.valid_protocol?(protocol)
       @@protocols.include? protocol
+    end
+
+    def self.valid_address(protocol, address, port)
+      case protocol
+        when :tpc
+          "#{protocol.to_s}://#{address}:#{port.to_s}"
+        when :ipc
+          "#{protocol.to_s}://#{address}"
+        when :inproc
+          "#{protocol.to_s}://#{address}"
+      end
     end
 
     private
