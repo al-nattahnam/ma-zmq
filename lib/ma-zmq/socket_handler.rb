@@ -47,6 +47,9 @@ module MaZMQ
 
     def close
       @socket.close
+      #if use_eventmachine
+      #  @connection.detach
+      #end
     end
 
     def addresses
