@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
     "test/helper.rb",
     "test/test_ma-zmq.rb"
   ]
-  s.homepage = "http://github.com/krakatoa/ma-zmq"
+  s.homepage = "http://github.com/alnattahnam/ma-zmq"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
   s.rubygems_version = "1.8.10"
