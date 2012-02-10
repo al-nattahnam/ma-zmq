@@ -53,7 +53,7 @@ module MaZMQ
             when :timeout
               @on_timeout_lambda.call #(@socket_handler.identity)
               puts "SocketHandler: #{@socket_handler.identity} timeout!"
-              self.detach
+              #self.detach
           end
       end
     end
