@@ -4,6 +4,7 @@ module MaZMQ
 
     def initialize(use_eventmachine=true)
       @socket = MaZMQ::context.socket(@socket_type)
+      @socket.setsockopt(ZMQ::LINGER, 0)
       @addresses = []
       if use_eventmachine
         build_connection
