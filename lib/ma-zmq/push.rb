@@ -2,9 +2,9 @@ module MaZMQ
   class Push < MaZMQ::SocketHandler
     attr_reader :state
 
-    def initialize(use_eventmachine=true)
+    def initialize
       @socket_type = ZMQ::PUSH
-      super(use_eventmachine)
+      super
     end
   end
 end

@@ -2,20 +2,23 @@ module MaZMQ
   class Pull < MaZMQ::SocketHandler
     attr_reader :state
 
-    def initialize(use_eventmachine=true)
+    def initialize
       @socket_type = ZMQ::PULL
 
       @last_try = nil
 
       @timeout = false
       # @cooldown
-      super(use_eventmachine)
+
+      @block = false
+      super
     end
 
     def recv_string
+      if @state == :idle
+        @state = :pulling
+      end
       case @state
-        when :idle
-          return false
         when :pulling
           @last_try ||= Time.now if @timeout
 

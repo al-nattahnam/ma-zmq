@@ -2,16 +2,18 @@ module MaZMQ
   class SocketHandler
     @@protocols = [:tcp, :inproc, :ipc] #, :pgm]
 
-    def initialize(use_eventmachine=true)
+    def initialize
       @socket = MaZMQ::context.socket(@socket_type)
       @socket.setsockopt(ZMQ::LINGER, 0)
       @addresses = []
-      if use_eventmachine
+
+      @block = EM.reactor_running? if @block == nil
+      if EM.reactor_running?
         build_connection
       else
         @connection = false
       end
-      @recv_flags = (use_eventmachine ? ZMQ::NOBLOCK : 0)
+      @recv_flags = (@block ? 0 : ZMQ::NOBLOCK)
       
       @state = :unavailable
     end

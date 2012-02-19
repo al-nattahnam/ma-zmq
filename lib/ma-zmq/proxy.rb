@@ -4,14 +4,14 @@ module MaZMQ
 
     #@@id = 0
 
-    def initialize(use_em=true)
+    def initialize
       @balancer = MaZMQ::Proxy::Balancer.new
 
       # @max_timeouts = 5 # TODO
       # @max_timeouted = 1
       # @max_retries
 
-      super(use_em)
+      super
     end
 
     def send_string(msg)

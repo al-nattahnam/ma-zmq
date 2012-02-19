@@ -7,6 +7,9 @@ require 'ma-zmq/socket_handler'
 require 'ma-zmq/request'
 require 'ma-zmq/reply'
 
+require 'ma-zmq/push'
+require 'ma-zmq/pull'
+
 require 'ma-zmq/proxy/backend'
 require 'ma-zmq/proxy/balancer'
 require 'ma-zmq/proxy'

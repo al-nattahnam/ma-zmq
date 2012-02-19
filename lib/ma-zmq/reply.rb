@@ -2,9 +2,9 @@ module MaZMQ
   class Reply < MaZMQ::SocketHandler
     attr_reader :state
 
-    def initialize(use_eventmachine=true)
+    def initialize
       @socket_type = ZMQ::REP
-      super(use_eventmachine)
+      super
     end
 
     def recv_string

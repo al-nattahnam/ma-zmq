@@ -2,14 +2,14 @@ module MaZMQ
   class Request < MaZMQ::SocketHandler
     attr_reader :state
 
-    def initialize(use_eventmachine=true)
+    def initialize
       @socket_type = ZMQ::REQ
 
       @last_try = nil
 
       @timeout = false
       # @cooldown
-      super(use_eventmachine)
+      super
     end
 
     def reconnect

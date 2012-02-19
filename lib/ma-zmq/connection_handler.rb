@@ -55,6 +55,18 @@ module MaZMQ
               puts "SocketHandler: #{@socket_handler.identity} timeout!"
               self.detach
           end
+        when ZMQ::PULL
+          msg = @socket_handler.recv_string
+          case @socket_handler.state
+            when :idle
+              if msg and not msg.empty?
+                @on_read_lambda.call(msg)
+              end
+            when :timeout
+              @on_timeout_lambda.call #(@socket_handler.identity)
+              puts "SocketHandler: #{@socket_handler.identity} timeout!"
+              self.detach
+          end
       end
     end
   end
