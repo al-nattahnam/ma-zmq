@@ -10,7 +10,6 @@ module MaZMQ
       @timeout = false
       # @cooldown
 
-      @block = false
       super
     end
 

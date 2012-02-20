@@ -7,13 +7,11 @@ module MaZMQ
       @socket.setsockopt(ZMQ::LINGER, 0)
       @addresses = []
 
-      @block = EM.reactor_running? if @block == nil
       if EM.reactor_running?
         build_connection
       else
         @connection = false
       end
-      @recv_flags = (@block ? 0 : ZMQ::NOBLOCK)
       
       @state = :unavailable
     end
@@ -63,9 +61,10 @@ module MaZMQ
       @socket.send_string(msg)
     end
 
-    def recv_string#(flags=nil)
+    def recv_string(flags=nil)
       msg = ''
-      @socket.recv_string(msg, @recv_flags)
+      flags ||= ZMQ::NOBLOCK
+      @socket.recv_string(msg, flags)
       return msg
     end
 
