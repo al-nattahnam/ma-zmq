@@ -9,8 +9,8 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Fernando Alonso"]
-  s.date = "2012-03-19"
-  s.description = "RoundRobin handler for the EmZeroMQ"
+  s.date = "2012-03-20"
+  s.description = "RoundRobin handler for ZMQ over EventedMachine"
   s.email = "krakatoa1987@gmail.com"
   s.extra_rdoc_files = [
     "LICENSE.txt",
@@ -40,11 +40,11 @@ Gem::Specification.new do |s|
     "test/helper.rb",
     "test/test_ma-zmq.rb"
   ]
-  s.homepage = "http://github.com/krakatoa/ma-zmq"
+  s.homepage = "http://github.com/al-nattahnam/ma-zmq"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
   s.rubygems_version = "1.8.10"
-  s.summary = "RoundRobin handler for the EmZeroMQ"
+  s.summary = "RoundRobin handler for ZMQ over EventedMachine"
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
