@@ -15,10 +15,10 @@ require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "ma-zmq"
-  gem.homepage = "http://github.com/krakatoa/ma-zmq"
+  gem.homepage = "http://github.com/al-nattahnam/ma-zmq"
   gem.license = "MIT"
-  gem.summary = %Q{RoundRobin handler for the EmZeroMQ}
-  gem.description = %Q{RoundRobin handler for the EmZeroMQ}
+  gem.summary = %Q{RoundRobin handler for ZMQ over EventedMachine}
+  gem.description = %Q{RoundRobin handler for ZMQ over EventedMachine}
   gem.email = "krakatoa1987@gmail.com"
   gem.authors = ["Fernando Alonso"]
   # dependencies defined in Gemfile
