@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Fernando Alonso"]
-  s.date = "2012-03-20"
+  s.date = "2012-05-11"
   s.description = "RoundRobin handler for ZMQ over EventedMachine"
   s.email = "krakatoa1987@gmail.com"
   s.extra_rdoc_files = [
@@ -50,14 +50,14 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<eventmachine>, ["= 0.12.10"])
+      s.add_runtime_dependency(%q<eventmachine>, ["= 1.0.0.beta.4"])
       s.add_runtime_dependency(%q<ffi-rzmq>, ["= 0.9.3"])
       s.add_development_dependency(%q<shoulda>, [">= 0"])
       s.add_development_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.6.4"])
       s.add_development_dependency(%q<rcov>, [">= 0"])
     else
-      s.add_dependency(%q<eventmachine>, ["= 0.12.10"])
+      s.add_dependency(%q<eventmachine>, ["= 1.0.0.beta.4"])
       s.add_dependency(%q<ffi-rzmq>, ["= 0.9.3"])
       s.add_dependency(%q<shoulda>, [">= 0"])
       s.add_dependency(%q<bundler>, ["~> 1.0.0"])
@@ -65,7 +65,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<rcov>, [">= 0"])
     end
   else
-    s.add_dependency(%q<eventmachine>, ["= 0.12.10"])
+    s.add_dependency(%q<eventmachine>, ["= 1.0.0.beta.4"])
     s.add_dependency(%q<ffi-rzmq>, ["= 0.9.3"])
     s.add_dependency(%q<shoulda>, [">= 0"])
     s.add_dependency(%q<bundler>, ["~> 1.0.0"])
