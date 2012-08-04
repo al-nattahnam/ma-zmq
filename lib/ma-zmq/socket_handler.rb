@@ -58,7 +58,7 @@ module MaZMQ
     end
 
     def send_string(msg)
-      @socket.send_string(msg)
+      @socket.send_string(msg) == 0 ? true : false
     end
 
     def recv_string(flags=nil)
