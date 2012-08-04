@@ -1,5 +1,5 @@
 module MaZMQ
-  class SocketHandler
+  module SocketHandler
     @@protocols = [:tcp, :inproc, :ipc] #, :pgm]
 
     def initialize
@@ -68,6 +68,9 @@ module MaZMQ
       return msg
     end
 
+    # Returns the ZMQ socket type
+    #
+    # @return [Fixnum] which can be one of ZMQ::REP, ZMQ::REQ, ZMQ::PUSH, ZMQ::PULL socket types contant values
     def socket_type
       @socket_type
     end

@@ -1,5 +1,7 @@
 module MaZMQ
-  class Reply < MaZMQ::SocketHandler
+  class Reply
+    include MaZMQ::SocketHandler
+
     attr_reader :state
 
     def initialize

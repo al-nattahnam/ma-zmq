@@ -1,5 +1,7 @@
 module MaZMQ
-  class Request < MaZMQ::SocketHandler
+  class Request
+    include MaZMQ::SocketHandler
+
     attr_reader :state
 
     def initialize

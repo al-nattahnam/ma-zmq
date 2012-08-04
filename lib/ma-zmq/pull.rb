@@ -1,5 +1,7 @@
 module MaZMQ
-  class Pull < MaZMQ::SocketHandler
+  class Pull
+    include MaZMQ::SocketHandler
+
     attr_reader :state
 
     def initialize

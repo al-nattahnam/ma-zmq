@@ -14,8 +14,8 @@ describe MaZMQ::Request do
 
   context 'when requesting to a listening Reply' do
     before do
-      @reply.bind :tcp, '127.0.0.1', 3000
-      @request.connect :tcp, '127.0.0.1', 3000
+      @reply.bind :tcp, '127.0.0.1', 5235
+      @request.connect :tcp, '127.0.0.1', 5235
     end
 
     it "should receive a response" do

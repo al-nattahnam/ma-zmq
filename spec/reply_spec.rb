@@ -14,8 +14,8 @@ describe MaZMQ::Reply do
 
   context 'when receiving from a Request' do
     before do
-      @reply.bind :tcp, '127.0.0.1', 3000
-      @request.connect :tcp, '127.0.0.1', 3000
+      @reply.bind :tcp, '127.0.0.1', 5235
+      @request.connect :tcp, '127.0.0.1', 5235
     end
 
     it "should send a response" do

@@ -1,5 +1,7 @@
 module MaZMQ
-  class Push < MaZMQ::SocketHandler
+  class Push
+    include MaZMQ::SocketHandler
+
     attr_reader :state
 
     def initialize
