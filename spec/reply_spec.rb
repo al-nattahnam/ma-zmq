@@ -51,7 +51,6 @@ describe MaZMQ::Reply do
             @reply.state.should == :idle
           }
           @request.on_read { |msg|
-            puts msg
             @reply.close
             @request.close
             EM.stop
