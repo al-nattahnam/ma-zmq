@@ -1,4 +1,5 @@
 = ma-zmq
+{<img src="https://secure.travis-ci.org/al-nattahnam/ma-zmq.png?branch=master" alt="Build Status" />}[http://travis-ci.org/al-nattahnam/ma-zmq]
 {<img src="https://gemnasium.com/al-nattahnam/ma-zmq.png" alt="Dependency Status" />}[https://gemnasium.com/al-nattahnam/ma-zmq]
 
 MaZMQ was born as an extension from EMZeroMQ, now aims to add more features than its inspiration. Its first purpose was to have a RoundRobin handler to work with ZMQ sockets.
