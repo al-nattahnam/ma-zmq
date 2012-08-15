@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "ma-zmq"
-  s.version = "0.0.1"
+  s.version = "0.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Fernando Alonso"]
-  s.date = "2012-05-11"
+  s.date = "2012-08-15"
   s.description = "RoundRobin handler for ZMQ over EventedMachine"
   s.email = "krakatoa1987@gmail.com"
   s.extra_rdoc_files = [
@@ -18,6 +18,8 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     ".document",
+    ".simplecov",
+    ".travis.yml",
     "Gemfile",
     "Gemfile.lock",
     "LICENSE.txt",
@@ -37,13 +39,15 @@ Gem::Specification.new do |s|
     "lib/ma-zmq/request.rb",
     "lib/ma-zmq/socket_handler.rb",
     "ma-zmq.gemspec",
-    "test/helper.rb",
-    "test/test_ma-zmq.rb"
+    "spec/reply_spec.rb",
+    "spec/request_spec.rb",
+    "spec/socket_handler_spec.rb",
+    "spec/spec_helper.rb"
   ]
   s.homepage = "http://github.com/al-nattahnam/ma-zmq"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = "1.8.10"
+  s.rubygems_version = "1.8.24"
   s.summary = "RoundRobin handler for ZMQ over EventedMachine"
 
   if s.respond_to? :specification_version then
@@ -52,25 +56,22 @@ Gem::Specification.new do |s|
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<eventmachine>, ["= 1.0.0.beta.4"])
       s.add_runtime_dependency(%q<ffi-rzmq>, ["= 0.9.3"])
-      s.add_development_dependency(%q<shoulda>, [">= 0"])
-      s.add_development_dependency(%q<bundler>, ["~> 1.0.0"])
-      s.add_development_dependency(%q<jeweler>, ["~> 1.6.4"])
-      s.add_development_dependency(%q<rcov>, [">= 0"])
+      s.add_development_dependency(%q<rspec>, ["~> 2.11.0"])
+      s.add_development_dependency(%q<bundler>, ["~> 1.1.3"])
+      s.add_development_dependency(%q<jeweler>, ["~> 1.8.4"])
     else
       s.add_dependency(%q<eventmachine>, ["= 1.0.0.beta.4"])
       s.add_dependency(%q<ffi-rzmq>, ["= 0.9.3"])
-      s.add_dependency(%q<shoulda>, [">= 0"])
-      s.add_dependency(%q<bundler>, ["~> 1.0.0"])
-      s.add_dependency(%q<jeweler>, ["~> 1.6.4"])
-      s.add_dependency(%q<rcov>, [">= 0"])
+      s.add_dependency(%q<rspec>, ["~> 2.11.0"])
+      s.add_dependency(%q<bundler>, ["~> 1.1.3"])
+      s.add_dependency(%q<jeweler>, ["~> 1.8.4"])
     end
   else
     s.add_dependency(%q<eventmachine>, ["= 1.0.0.beta.4"])
     s.add_dependency(%q<ffi-rzmq>, ["= 0.9.3"])
-    s.add_dependency(%q<shoulda>, [">= 0"])
-    s.add_dependency(%q<bundler>, ["~> 1.0.0"])
-    s.add_dependency(%q<jeweler>, ["~> 1.6.4"])
-    s.add_dependency(%q<rcov>, [">= 0"])
+    s.add_dependency(%q<rspec>, ["~> 2.11.0"])
+    s.add_dependency(%q<bundler>, ["~> 1.1.3"])
+    s.add_dependency(%q<jeweler>, ["~> 1.8.4"])
   end
 end
 
