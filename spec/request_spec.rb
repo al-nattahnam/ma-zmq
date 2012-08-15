@@ -59,6 +59,30 @@ describe MaZMQ::Request do
           }
         end
       end
+
+      context ".send_string" do
+        it "should return false when trying to send before receiving a response" do
+          EM.run do
+            @reply = MaZMQ::Reply.new
+            @request = MaZMQ::Request.new
+
+            @reply.bind :tcp, '127.0.0.1', 5235
+            @request.connect :tcp, '127.0.0.1', 5235
+
+            @request.send_string("request").should == :sending
+            @request.send_string("request").should == false
+
+            @reply.on_read { |msg|
+              @reply.send_string("response")
+            }
+            @request.on_read { |msg|
+              @reply.close
+              @request.close
+              EM.stop
+            }
+          end
+        end
+      end
     end
   end
 
