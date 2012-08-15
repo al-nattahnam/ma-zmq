@@ -28,6 +28,10 @@ module MaZMQ
       if @state == :unavailable
         @state = :idle
       end
+
+      # Retry and add callback when running under EM ?
+      # so it works as on_connect { puts ""}
+      # on_connection_error
       @state
     end
 
@@ -97,27 +101,24 @@ module MaZMQ
 
     protected
     def self.valid_address(protocol, address, port=nil)
+      protocol = protocol.to_sym
+      return false if not MaZMQ::SocketHandler.valid_protocol?(protocol)
       case protocol
         when :tcp
           if port.is_a? Numeric
             return "#{protocol}://#{address}:#{port.to_s}"
-          else
-            return false
           end
         when :ipc
           # Chequear socket file
           if port.is_a? NilClass
             return "#{protocol}://#{address}"
-          else
-            return false
           end
         when :inproc
           if port.is_a? NilClass
             return "#{protocol}://#{address}"
-          else
-            return false
           end
       end
+      return false
     end
 
     def self.valid_protocol?(protocol)
