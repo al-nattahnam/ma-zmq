@@ -67,8 +67,14 @@ module MaZMQ
 
     def recv_string(flags=nil)
       msg = ''
-      flags ||= ZMQ::NOBLOCK
-      @socket.recv_string(msg, flags)
+      if EM.reactor_running?
+        flags ||= ZMQ::NOBLOCK
+      end
+      if flags
+        @socket.recv_string(msg, flags)
+      else
+        @socket.recv_string(msg)
+      end
       return msg
     end
 
