@@ -7,8 +7,7 @@ module MaZMQ
       @socket.setsockopt(ZMQ::LINGER, 0)
       @addresses = []
 
-      #@native_thread = Thread.current.hash
-      @em_reactor_running = EM.reactor_running?
+      @em_reactor_running = EM.reactor_running? && EM.reactor_thread?
 
       if @em_reactor_running
         build_connection

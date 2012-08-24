@@ -5,7 +5,7 @@ module MaZMQ
         @sockets = []
 
         @timeout = nil # TODO individual timeouts for different sockets
-        @em_reactor_running = EM.reactor_running?
+        @em_reactor_running = EM.reactor_running? && EM.reactor_thread?
       end
 
       def connect(protocol, address, port)
