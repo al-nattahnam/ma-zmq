@@ -135,4 +135,49 @@ describe MaZMQ::Request do
       sleep 1
     end
   end
+  
+  context "not under EM, Reply inside Thread/EM" do
+    before(:each) do
+      @request = MaZMQ::Request.new
+    end
+
+    context 'when requesting to a listening Reply' do
+      before do
+        @reply_thread = Thread.new {
+          EM.run do
+            @reply = MaZMQ::Reply.new
+            @reply.bind :tcp, "127.0.0.1", 5235
+            @reply.on_read { |msg|
+              @reply.send_string("response")
+              @reply.close
+              EM.stop
+            }
+          end
+        }
+        sleep 1
+        @request.connect :tcp, '127.0.0.1', 5235
+      end
+
+      it "should receive a response" do
+        @request.send_string("request").should == :sending; sleep 1
+        
+        @request.recv_string.should == "response"
+      end
+
+      it "should change its state" do
+        @request.state.should == :idle
+
+        @request.send_string("request"); sleep 1
+        @request.state.should == :sending
+
+        @request.recv_string
+        @request.state.should == :idle
+      end
+    end
+
+    after(:each) do
+      @request.close
+      sleep 1
+    end
+  end
 end
