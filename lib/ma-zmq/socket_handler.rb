@@ -7,13 +7,21 @@ module MaZMQ
       @socket.setsockopt(ZMQ::LINGER, 0)
       @addresses = []
 
-      if EM.reactor_running?
+      #@native_thread = Thread.current.hash
+      @em_reactor_running = EM.reactor_running?
+
+      if @em_reactor_running
         build_connection
       else
         @connection = false
       end
       
       @state = :unavailable
+    end
+
+    def em_reactor_running?
+      # Thread.current.hash == @thread
+      @em_reactor_running
     end
 
     def connect(protocol, address, port=nil)
@@ -67,7 +75,7 @@ module MaZMQ
 
     def recv_string(flags=nil)
       msg = ''
-      if EM.reactor_running?
+      if @em_reactor_running
         flags ||= ZMQ::NOBLOCK
       end
       if flags

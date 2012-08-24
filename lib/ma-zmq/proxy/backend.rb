@@ -5,13 +5,14 @@ module MaZMQ
         @sockets = []
 
         @timeout = nil # TODO individual timeouts for different sockets
+        @em_reactor_running = EM.reactor_running?
       end
 
       def connect(protocol, address, port)
         # validate as in SocketHandler
         request = MaZMQ::Request.new
         request.connect(protocol, address, port)
-        if EM.reactor_running?
+        if @em_reactor_running
           request.timeout(@timeout)
           if @on_read_lambda.is_a? Proc
             request.on_read { |msg|
@@ -47,7 +48,7 @@ module MaZMQ
       end
 
       def on_timeout(&block)  
-        return false if not EM.reactor_running?
+        return false if not @em_reactor_running
         @on_timeout_lambda = block
         @sockets.each do |socket|
           socket.on_timeout {
@@ -57,7 +58,7 @@ module MaZMQ
       end
 
       def on_read(&block)
-        return false if not EM.reactor_running?
+        return false if not @em_reactor_running
         @on_read_lambda = block
         @sockets.each do |socket|
           socket.on_read { |msg|
